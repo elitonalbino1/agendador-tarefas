@@ -5,7 +5,7 @@ import com.javanauta.agendadortarefas.business.mapper.TarefaUpdateConverter;
 import com.javanauta.agendadortarefas.business.mapper.TarefasConverter;
 import com.javanauta.agendadortarefas.infrastructure.entity.TarefasEntity;
 import com.javanauta.agendadortarefas.infrastructure.enums.StatusNotificacaoEnum;
-import com.javanauta.agendadortarefas.infrastructure.exceptions.ResounceNotFoundException;
+import com.javanauta.agendadortarefas.infrastructure.exceptions.ResourceNotFoundException;
 import com.javanauta.agendadortarefas.infrastructure.repository.TarefasRepository;
 import com.javanauta.agendadortarefas.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +49,8 @@ public class TarefasService {
     public void deletaTarefasPorId(String id) {
         try {
             tarefasRepository.deleteById(id);
-        } catch (ResounceNotFoundException e) {
-            throw new ResounceNotFoundException("Erro ao tentar deletar tarefas por ID: " + id,
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Erro ao tentar deletar tarefas por ID: " + id,
                     e.getCause());
         }
     }
@@ -58,11 +58,11 @@ public class TarefasService {
     public TarefasDTO alteraStatus(StatusNotificacaoEnum status, String id) {
         try {
             TarefasEntity entity = tarefasRepository.findById(id).
-                    orElseThrow(() -> new ResounceNotFoundException("Tarefa nao encontrada " + id));
+                    orElseThrow(() -> new ResourceNotFoundException("Tarefa nao encontrada " + id));
             entity.setStatusNotificacaoEnum(status);
             return tarefaConverter.paraTarefaDTO(tarefasRepository.save(entity));
-        } catch (ResounceNotFoundException e) {
-            throw new ResounceNotFoundException("Erro ao alterar o status da tarefa" + e.getCause());
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Erro ao alterar o status da tarefa" + e.getCause());
         }
 
     }
@@ -70,12 +70,12 @@ public class TarefasService {
     public TarefasDTO updateTarefas(TarefasDTO dto, String id) {
         try {
             TarefasEntity entity = tarefasRepository.findById(id).
-                    orElseThrow(() -> new ResounceNotFoundException("Tarefa nao encontrada " + id));
+                    orElseThrow(() -> new ResourceNotFoundException("Tarefa nao encontrada " + id));
             tarefaUpdateConverter.updateTarefas(dto, entity);
             return tarefaConverter.paraTarefaDTO(tarefasRepository.save(entity));
 
-        } catch (ResounceNotFoundException e) {
-            throw new ResounceNotFoundException("Erro ao alterar o status da tarefa" + e.getCause());
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Erro ao alterar o status da tarefa" + e.getCause());
         }
     }
 }
