@@ -11,5 +11,4 @@ public class AgendadorTarefasApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AgendadorTarefasApplication.class, args);
 	}
-
 }
