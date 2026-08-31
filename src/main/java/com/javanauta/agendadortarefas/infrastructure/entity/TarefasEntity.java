@@ -23,11 +23,8 @@ public class TarefasEntity {
 
     @Id
     private String id;
-
     private String nomeTarefa;
-
     private String descricaoTarefa;
-
     private LocalDateTime dataCriacao;
 
     @Indexed
@@ -35,8 +32,6 @@ public class TarefasEntity {
 
     @Indexed
     private String emailUsuario;
-
     private LocalDateTime dataAlteracao;
-
     private StatusNotificacaoEnum statusNotificacaoEnum;
 }
