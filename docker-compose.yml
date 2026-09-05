@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+  agendador-tarefas:
+    build: .
+    container_name: agendador-tarefas
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
