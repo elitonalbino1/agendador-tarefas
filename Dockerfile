@@ -1,9 +1,14 @@
+FROM gradle:7.5-jdk17 as build
+WORKDIR /app
+COPY . .
+run gradle build --no-daemon
+
 FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-COPY target/bff-agendador-0.0.1-SNAPSHOT.jar /app/bff-agendador-tarefas.jar
+COPY --from=build /app/build/libs/*.jar /app/agendador-tarefas.jar
 
-EXPOSE 8083
+EXPOSE 8081
 
-ENTRYPOINT ["java", "-jar", "/app/bff-agendador-tarefas.jar"]
+ENTRYPOINT ["java", "-jar", "/app/agendador-tarefas.jar"]
