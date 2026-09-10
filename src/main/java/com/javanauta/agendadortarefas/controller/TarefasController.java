@@ -1,7 +1,7 @@
 package com.javanauta.agendadortarefas.controller;
 
 import com.javanauta.agendadortarefas.business.TarefasService;
-import com.javanauta.agendadortarefas.business.dto.TarefasDTO;
+import com.javanauta.agendadortarefas.business.dto.TarefasDTORecord;
 import com.javanauta.agendadortarefas.infrastructure.enums.StatusNotificacaoEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,45 +21,42 @@ public class TarefasController {
     private final TarefasService tarefasService;
 
     @PostMapping
-    public ResponseEntity<TarefasDTO> gravaTarefas(
-            @Valid @RequestBody TarefasDTO dto,
+    public ResponseEntity<TarefasDTORecord> gravaTarefas(
+            @Valid @RequestBody TarefasDTORecord dto,
             @RequestHeader("Authorization") String token) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(tarefasService.gravarTarefa(token, dto));
     }
 
     @GetMapping("/eventos")
-    public ResponseEntity<List<TarefasDTO>> buscaListaDeTarefasPorPeriodo(
+    public ResponseEntity<List<TarefasDTORecord>> buscaListaDeTarefasPorPeriodo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal) {
         return ResponseEntity.ok(tarefasService.buscaTarefasAgendadasPorPeriodo(dataInicial, dataFinal));
     }
 
     @GetMapping
-    public ResponseEntity<List<TarefasDTO>> buscarTarefasPorEmail(
+    public ResponseEntity<List<TarefasDTORecord>> buscarTarefasPorEmail(
             @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.buscaTarefasPorEmail(token));
     }
 
-    // ✅ CORRIGIDO: PathVariable (alinhado com o BFF)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletaTarefasPorId(@PathVariable("id") String id) {
         tarefasService.deletaTarefasPorId(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ✅ CORRIGIDO: PathVariable (alinhado com o BFF)
     @PatchMapping("/{id}")
-    public ResponseEntity<TarefasDTO> alteraStatusNotificacao(
+    public ResponseEntity<TarefasDTORecord> alteraStatusNotificacao(
             @RequestParam("status") StatusNotificacaoEnum status,
             @PathVariable("id") String id) {
         return ResponseEntity.ok(tarefasService.alteraStatus(status, id));
     }
 
-    // ✅ CORRIGIDO: PathVariable (alinhado com o BFF)
     @PutMapping("/{id}")
-    public ResponseEntity<TarefasDTO> updateTarefas(
-            @Valid @RequestBody TarefasDTO dto,
+    public ResponseEntity<TarefasDTORecord> updateTarefas(
+            @Valid @RequestBody TarefasDTORecord dto,
             @PathVariable("id") String id) {
         return ResponseEntity.ok(tarefasService.updateTarefas(dto, id));
     }
