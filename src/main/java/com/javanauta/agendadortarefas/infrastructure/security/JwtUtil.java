@@ -15,7 +15,6 @@ import java.util.Date;
 @Slf4j
 public class JwtUtil {
 
-    // ✅ CORRIGIDO: agora usa a property (antes ignorava e usava hardcoded)
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -25,10 +24,10 @@ public class JwtUtil {
 
     public Claims extractClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(getSigningKey())
+                .verifyWith(getSigningKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public String extrairEmailToken(String token) {
